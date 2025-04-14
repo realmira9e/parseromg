@@ -18,28 +18,6 @@ soup = BeautifulSoup(response.text, 'html.parser')
 
 article_items = soup.find_all('li', class_ = "mw-search-result")
 
-def get_article_details(article_url):
-    try:
-        response = requests.get(article_url, timeout=5)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # Получаем дату последнего редактирования
-        last_edit = soup.find('li', {'id': 'footer-info-lastmod'})
-        edit_date = last_edit.text.split(';')[-1].strip() if last_edit else "Неизвестно"
-        
-        # Получаем количество правок
-        edit_count = soup.find('a', {'href': f'{article_url}&action=history'})
-        edit_count = edit_count.text.split()[0] if edit_count else "Неизвестно"
-        
-        return {
-            'last_edit': edit_date,
-            'edit_count': edit_count
-        }
-    except Exception as e:
-        print(f"Ошибка при получении деталей статьи: {e}")
-        return None
-
 for article in article_items[:5]:
     title_tag = article.find('div', class_="mw-search-result-heading")
     title = title_tag.text.strip() if title_tag else "Нет названия"
