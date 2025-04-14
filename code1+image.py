@@ -20,10 +20,6 @@ article_items = soup.find_all('li', class_ = "mw-search-result")
 
 def get_article_details(article_url):
     try:
-        response = requests.get(article_url, timeout=5)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
         # Получаем дату последнего редактирования
         last_edit = soup.find('li', {'id': 'footer-info-lastmod'})
         edit_date = last_edit.text.split(';')[-1].strip() if last_edit else "Неизвестно"
